@@ -1,2 +1,14 @@
 # mir-container
-The custom data structures for MIR 1.0
+
+C++20 Standard Container Library (MIR 1.0 Custom Data Structures).
+
+This repository provides a collection of highly optimized, lightweight, and modern C++20 custom templates including List, Map, Pool, SparseSet, and String.
+
+---
+
+## Language Selection / 문서 언어 선택
+
+Please select your preferred language to view the comprehensive documentation, build instructions, and integration guides:
+
+*   [English](README_EN.md) - View the complete documentation in English.
+*   [한국어](README_KR.md) - 한국어로 작성된 상세 개발 문서 및 연동 가이드를 봅니다.

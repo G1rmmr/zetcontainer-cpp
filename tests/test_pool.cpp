@@ -1,6 +1,7 @@
 #include "doctest.h"
 #include "Pool.hpp"
 #include "String.hpp"
+#include <ostream>
 
 TEST_CASE("Pool basic operations") {
     mir::Pool<mir::String<32>, 4> pool;

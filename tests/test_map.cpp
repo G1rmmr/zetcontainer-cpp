@@ -1,6 +1,7 @@
 #include "doctest.h"
 #include "Map.hpp"
 #include "String.hpp"
+#include <ostream>
 
 TEST_CASE("Map basic operations") {
     mir::Map<int, mir::String<32>, 10> myMap;

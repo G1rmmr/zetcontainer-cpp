@@ -1,6 +1,7 @@
 #include "doctest.h"
 #include "String.hpp"
 #include <string_view>
+#include <ostream>
 
 TEST_CASE("String basic operations") {
     SUBCASE("Construction") {

@@ -1,6 +1,7 @@
 #include "doctest.h"
 #include "SparseSet.hpp"
 #include "String.hpp"
+#include <ostream>
 
 TEST_CASE("SparseSet basic operations") {
     mir::SparseSet<mir::String<32>, 10> set;

@@ -21,7 +21,7 @@ jobs:
 
     # Setup xmake environment
     - name: Setup Xmake
-      uses: xmake-io/github-action-setup@v2
+      uses: xmake-io/github-action-setup-xmake@v1
       with:
         xmake-version: latest
 

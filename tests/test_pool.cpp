@@ -1,0 +1,57 @@
+#include "doctest.h"
+#include "Pool.hpp"
+#include "String.hpp"
+
+TEST_CASE("Pool basic operations") {
+    mir::Pool<mir::String<32>, 4> pool;
+    
+    SUBCASE("Create and Get") {
+        auto h1 = pool.Create("First");
+        auto h2 = pool.Create("Second");
+        
+        CHECK(h1.index == 0);
+        CHECK(h2.index == 1);
+        
+        CHECK(pool.Get(h1) == "First");
+        CHECK(pool.Get(h2) == "Second");
+        
+        CHECK(pool[h1] == "First");
+    }
+    
+    SUBCASE("Destroy and Reuse") {
+        auto h1 = pool.Create("First");
+        auto h2 = pool.Create("Second");
+        
+        pool.Destroy(h1);
+        
+        // Next creation should reuse slot 0, but with an incremented generation
+        auto h3 = pool.Create("Third");
+        CHECK(h3.index == 0);
+        CHECK(h3.generation == h1.generation + 1);
+        CHECK(pool.Get(h3) == "Third");
+        
+        CHECK(h1 != h3);
+    }
+    
+    SUBCASE("Clear") {
+        auto h1 = pool.Create("First");
+        pool.Clear();
+        
+        // Verify we can create again starting from index 0 after clear
+        auto h2 = pool.Create("Second");
+        CHECK(h2.index == 0);
+        CHECK(pool.Get(h2) == "Second");
+    }
+    
+    SUBCASE("Iteration") {
+        pool.Create("One");
+        pool.Create("Two");
+        
+        int count = 0;
+        for (const auto& item : pool) {
+            (void)item;
+            count++;
+        }
+        CHECK(count == 2);
+    }
+}

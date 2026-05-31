@@ -1,0 +1,51 @@
+#include "doctest.h"
+#include "SparseSet.hpp"
+#include "String.hpp"
+
+TEST_CASE("SparseSet basic operations") {
+    mir::SparseSet<mir::String<32>, 10> set;
+    
+    SUBCASE("Insert and Contains") {
+        CHECK(set.Size() == 0);
+        
+        set.Insert(5, "Entity5");
+        set.Insert(2, "Entity2");
+        
+        CHECK(set.Size() == 2);
+        CHECK(set.Contains(5));
+        CHECK(set.Contains(2));
+        CHECK_FALSE(set.Contains(0));
+        
+        CHECK(set.Get(5) == "Entity5");
+        CHECK(set.Get(2) == "Entity2");
+    }
+    
+    SUBCASE("Remove and Packing") {
+        set.Insert(1, "One");
+        set.Insert(2, "Two");
+        set.Insert(3, "Three");
+        
+        // Remove 'Two' (ID 2). This should swap 'Three' (ID 3, last element) into 'Two's position.
+        set.Remove(2);
+        
+        CHECK(set.Size() == 2);
+        CHECK(set.Contains(1));
+        CHECK_FALSE(set.Contains(2));
+        CHECK(set.Contains(3));
+        
+        CHECK(set.GetAt(0) == "One");
+        CHECK(set.GetAt(1) == "Three");
+    }
+    
+    SUBCASE("Iteration") {
+        set.Insert(1, "One");
+        set.Insert(3, "Three");
+        
+        int count = 0;
+        for (const auto& item : set) {
+            (void)item;
+            count++;
+        }
+        CHECK(count == 2);
+    }
+}

@@ -18,9 +18,13 @@ namespace mir {
         }
 
         template <typename... Args> requires std::constructible_from<T, Args...>
-        constexpr T& Insert(std::size_t id, Args&&... args) {
+        constexpr T& Assign(std::size_t id, Args&&... args) {
             assert(id < C && "[mir::SparseSet] ID OUT OF RANGE");
-            assert(!Contains(id) && "[mir::SparseSet] ID ALREADY EXISTS");
+            if (Contains(id)) {
+                std::destroy_at(std::addressof(data[sparse[id]].value));
+                T* ptr = std::construct_at(std::addressof(data[sparse[id]].value), std::forward<Args>(args)...);
+                return *ptr;
+            }
 
             std::size_t denseIndex = count;
             sparse[id] = denseIndex;

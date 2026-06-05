@@ -51,7 +51,7 @@ TEST_CASE("Map basic operations") {
         
         int keySum = 0;
         for (auto pair : myMap) {
-            keySum += pair.key;
+            keySum += pair.Key;
         }
         CHECK(keySum == 30);
     }

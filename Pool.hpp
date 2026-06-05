@@ -9,11 +9,11 @@ namespace mir {
     const static std::size_t DEFAULT_POOL_CAPACITY = 1024;
     
     struct PoolHandle {
-        std::size_t index;
-        std::size_t generation;
+        std::size_t Index;
+        std::size_t Generation;
 
         constexpr bool operator==(const PoolHandle& other) const noexcept {
-            return index == other.index && generation == other.generation;
+            return Index == other.Index && Generation == other.Generation;
         }
         
         constexpr bool operator!=(const PoolHandle& other) const noexcept {
@@ -97,42 +97,42 @@ namespace mir {
         }
 
         constexpr void Destroy(PoolHandle handle) {
-            assert(handle.index < C && "[mir::Pool] INVALID INDEX");
+            assert(handle.Index < C && "[mir::Pool] INVALID INDEX");
 
-            assert(generations[handle.index] == handle.generation && 
+            assert(generations[handle.Index] == handle.Generation && 
                 "[mir::Pool] DANGLING HANDLE (ALREADY DESTROYED OR REPLACED)");
 
-            assert(occupied[handle.index] && "[mir::Pool] DESTROYING NON-EXISTENT OBJECT");
+            assert(occupied[handle.Index] && "[mir::Pool] DESTROYING NON-EXISTENT OBJECT");
 
-            std::destroy_at(std::addressof(data[handle.index].value));
+            std::destroy_at(std::addressof(data[handle.Index].value));
             
-            occupied[handle.index] = false;
-            generations[handle.index]++;
+            occupied[handle.Index] = false;
+            generations[handle.Index]++;
             
-            data[handle.index].next = nextFree;
-            nextFree = handle.index;
+            data[handle.Index].next = nextFree;
+            nextFree = handle.Index;
         }
 
         constexpr T& Get(PoolHandle handle) {
-            assert(handle.index < C && "[mir::Pool] INVALID INDEX");
+            assert(handle.Index < C && "[mir::Pool] INVALID INDEX");
 
-            assert(generations[handle.index] == handle.generation && 
+            assert(generations[handle.Index] == handle.Generation && 
                 "[mir::Pool] DANGLING HANDLE DETECTED (USE AFTER FREE)");
 
-            assert(occupied[handle.index] && "[mir::Pool] ACCESSING NON-EXISTENT OBJECT");
+            assert(occupied[handle.Index] && "[mir::Pool] ACCESSING NON-EXISTENT OBJECT");
             
-            return data[handle.index].value;
+            return data[handle.Index].value;
         }
 
         constexpr const T& Get(PoolHandle handle) const {
-            assert(handle.index < C && "[mir::Pool] INVALID INDEX");
+            assert(handle.Index < C && "[mir::Pool] INVALID INDEX");
 
-            assert(generations[handle.index] == handle.generation && 
+            assert(generations[handle.Index] == handle.Generation && 
                 "[mir::Pool] DANGLING HANDLE DETECTED (USE AFTER FREE)");
 
-            assert(occupied[handle.index] && "[mir::Pool] ACCESSING NON-EXISTENT OBJECT");
+            assert(occupied[handle.Index] && "[mir::Pool] ACCESSING NON-EXISTENT OBJECT");
             
-            return data[handle.index].value;
+            return data[handle.Index].value;
         }
 
         constexpr T& operator[](PoolHandle handle) { 

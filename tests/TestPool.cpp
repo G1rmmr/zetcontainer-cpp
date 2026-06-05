@@ -10,8 +10,8 @@ TEST_CASE("Pool basic operations") {
         auto h1 = pool.Create("First");
         auto h2 = pool.Create("Second");
         
-        CHECK(h1.index == 0);
-        CHECK(h2.index == 1);
+        CHECK(h1.Index == 0);
+        CHECK(h2.Index == 1);
         
         CHECK(pool.Get(h1) == "First");
         CHECK(pool.Get(h2) == "Second");
@@ -27,8 +27,8 @@ TEST_CASE("Pool basic operations") {
         
         // Next creation should reuse slot 0, but with an incremented generation
         auto h3 = pool.Create("Third");
-        CHECK(h3.index == 0);
-        CHECK(h3.generation == h1.generation + 1);
+        CHECK(h3.Index == 0);
+        CHECK(h3.Generation == h1.Generation + 1);
         CHECK(pool.Get(h3) == "Third");
         
         CHECK(h1 != h3);
@@ -40,7 +40,7 @@ TEST_CASE("Pool basic operations") {
         
         // Verify we can create again starting from index 0 after clear
         auto h2 = pool.Create("Second");
-        CHECK(h2.index == 0);
+        CHECK(h2.Index == 0);
         CHECK(pool.Get(h2) == "Second");
     }
     

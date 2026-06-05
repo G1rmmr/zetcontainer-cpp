@@ -14,13 +14,13 @@ namespace mir {
     class Map {
     public:
         struct Pair {
-            const K& key;
-            V& value;
+            const K& Key;
+            V& Value;
         };
 
         struct ConstPair {
-            const K& key;
-            const V& value;
+            const K& Key;
+            const V& Value;
         };
 
         class Iterator {

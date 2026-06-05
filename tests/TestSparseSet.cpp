@@ -6,11 +6,11 @@
 TEST_CASE("SparseSet basic operations") {
     mir::SparseSet<mir::String<32>, 10> set;
     
-    SUBCASE("Insert and Contains") {
+    SUBCASE("Assign and Contains") {
         CHECK(set.Size() == 0);
         
-        set.Insert(5, "Entity5");
-        set.Insert(2, "Entity2");
+        set.Assign(5, "Entity5");
+        set.Assign(2, "Entity2");
         
         CHECK(set.Size() == 2);
         CHECK(set.Contains(5));
@@ -22,9 +22,9 @@ TEST_CASE("SparseSet basic operations") {
     }
     
     SUBCASE("Remove and Packing") {
-        set.Insert(1, "One");
-        set.Insert(2, "Two");
-        set.Insert(3, "Three");
+        set.Assign(1, "One");
+        set.Assign(2, "Two");
+        set.Assign(3, "Three");
         
         // Remove 'Two' (ID 2). This should swap 'Three' (ID 3, last element) into 'Two's position.
         set.Remove(2);
@@ -39,8 +39,8 @@ TEST_CASE("SparseSet basic operations") {
     }
     
     SUBCASE("Iteration") {
-        set.Insert(1, "One");
-        set.Insert(3, "Three");
+        set.Assign(1, "One");
+        set.Assign(3, "Three");
         
         int count = 0;
         for (const auto& item : set) {

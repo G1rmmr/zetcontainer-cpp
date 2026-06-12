@@ -1,8 +1,8 @@
-# mir-container
+# zet
 
-> C++20 표준 컨테이너 라이브러리 (MIR 1.0 Custom Data Structures)
+> C++20 표준 컨테이너 라이브러리 (ZET - Zro allocated Execution Toolkit)
 > 
-> 본 라이브러리는 List, Map, Pool, SparseSet, String 등 MIR 1.0 사양을 충족하는 C++20 기반 고성능/초경량 커스텀 자료구조 모음집입니다. 헤더 전용(Header-only) 설계의 유연함과 정적 라이브러리(.a/.lib) 컴파일 빌드의 견고함을 모두 제공합니다.
+> 본 라이브러리는 List, Map, Pool, SparseSet, String 등 ZET 사양을 충족하는 C++20 기반 고성능/초경량 커스텀 자료구조 모음집입니다. 헤더 전용(Header-only) 설계의 유연함과 정적 라이브러리(.a/.lib) 컴파일 빌드의 견고함을 모두 제공합니다.
 
 ---
 
@@ -38,7 +38,7 @@ xmake config --mode=debug --yes
 # 2. 정적 라이브러리 및 테스트 파일 컴파일
 xmake
 
-# 3. 71개 단언문(Assertion) 검증 테스트 실행
+# 3. 단언문(Assertion) 검증 테스트 실행
 xmake test
 
 # 4. 릴리즈 모드로 최적화 빌드 설정 전환
@@ -55,22 +55,22 @@ xmake
 
 ## 2. 다른 Xmake 프로젝트에서 사용하는 방법
 
-빌드된 mir-container 라이브러리를 다른 프로젝트에서 가져와 연동하는 가장 현대적이고 세련된 두 가지 방법을 제안합니다.
+빌드된 zet 라이브러리를 다른 프로젝트에서 가져와 연동하는 가장 현대적이고 세련된 두 가지 방법을 제안합니다.
 
 ### 방식 [A] 하위 모듈 의존성 추가 (가장 추천)
-소비자(다른 프로젝트)의 저장소에 mir-container 폴더를 하위 폴더나 Git 서브모듈(Submodule)로 추가한 뒤, 소비자 프로젝트의 xmake.lua 파일에 아래 내용을 기재합니다.
+소비자(다른 프로젝트)의 저장소에 zet 폴더를 하위 폴더나 Git 서브모듈(Submodule)로 추가한 뒤, 소비자 프로젝트의 xmake.lua 파일에 아래 내용을 기재합니다.
 
 ```lua
--- 1. mir-container 프로젝트 설정을 하위 프로젝트로 선언합니다.
-includes("path/to/mir-container")
+-- 1. zet 프로젝트 설정을 하위 프로젝트로 선언합니다.
+includes("path/to/zet")
 
 target("my_application")
     set_kind("binary")
     add_files("src/*.cpp")
     
     -- 2. 단 한 줄로 의존성을 연동합니다.
-    -- (mir-container의 헤더 파일 검색 경로와 라이브러리 링크가 자동으로 전파됩니다!)
-    add_deps("mir-container")
+    -- (zet의 헤더 파일 검색 경로와 라이브러리 링크가 자동으로 전파됩니다!)
+    add_deps("zet")
 ```
 
 ---
@@ -82,9 +82,9 @@ target("my_application")
 
 ```lua
 -- 1. 내 깃허브 저장소 주소를 원격 패키지 소스로 등록하고 불러옵니다.
-add_requires("mir-container", {
-    alias = "mir-container",
-    url = "https://github.com/G1rmmr/mir-container.git",
+add_requires("zet", {
+    alias = "zet",
+    url = "https://github.com/G1rmmr/zet.git",
     on_install = function (package)
         -- 사용자의 OS 환경(윈도우/맥/리눅스)에 맞춰 백그라운드에서 자동 무중단 빌드
         import("package.tools.xmake").install(package)
@@ -95,7 +95,7 @@ add_requires("mir-container", {
 target("my_application")
     set_kind("binary")
     add_files("src/*.cpp")
-    add_packages("mir-container")
+    add_packages("zet")
 ```
 
 ---

@@ -6,7 +6,7 @@
 #include <concepts>
 #include <algorithm>
 
-namespace mir {
+namespace zet {
     const static std::size_t DEFAULT_SPARSE_SET_CAPACITY = 1024;
 
     template <typename T, std::size_t C = DEFAULT_SPARSE_SET_CAPACITY> 
@@ -19,7 +19,7 @@ namespace mir {
 
         template <typename... Args> requires std::constructible_from<T, Args...>
         constexpr T& Assign(std::size_t id, Args&&... args) {
-            assert(id < C && "[mir::SparseSet] ID OUT OF RANGE");
+            assert(id < C && "[zet::SparseSet] ID OUT OF RANGE");
             if (Contains(id)) {
                 std::destroy_at(std::addressof(data[sparse[id]].value));
                 T* ptr = std::construct_at(std::addressof(data[sparse[id]].value), std::forward<Args>(args)...);
@@ -64,12 +64,12 @@ namespace mir {
         }
 
         constexpr T& Get(std::size_t id) {
-            assert(Contains(id) && "[mir::SparseSet] ID NOT FOUND");
+            assert(Contains(id) && "[zet::SparseSet] ID NOT FOUND");
             return data[sparse[id]].value;
         }
 
         constexpr const T& Get(std::size_t id) const {
-            assert(Contains(id) && "[mir::SparseSet] ID NOT FOUND");
+            assert(Contains(id) && "[zet::SparseSet] ID NOT FOUND");
             return data[sparse[id]].value;
         }
 
@@ -78,7 +78,7 @@ namespace mir {
         }
         
         constexpr T& GetAt(std::size_t index) {
-            assert(index < count && "[mir::SparseSet] INDEX OUT OF BOUNDS");
+            assert(index < count && "[zet::SparseSet] INDEX OUT OF BOUNDS");
             return data[index].value;
         }
 

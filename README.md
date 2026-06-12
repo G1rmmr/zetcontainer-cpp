@@ -1,6 +1,6 @@
-# mir-container
+# zet
 
-C++20 Standard Container Library (MIR 1.0 Custom Data Structures).
+C++20 Standard Container Library (ZET - Zro allocated Execution Toolkit).
 
 This repository provides a collection of highly optimized, lightweight, and modern C++20 custom templates including List, Map, Pool, SparseSet, and String.
 

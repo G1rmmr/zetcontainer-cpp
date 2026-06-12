@@ -5,12 +5,12 @@ add_rules("plugin.compile_commands.autoupdate", {outputdir = "."})
 add_requires("doctest")
 
 -- Static Library Target
-target("mir-container")
+target("zet")
     set_kind("static")
     set_languages("c++20")
-    -- Export current directory so dependency targets can automatically include our headers
-    add_includedirs(".", {public = true})
-    add_headerfiles("*.hpp")
+    -- Export current directory and subdirectories so dependency targets can automatically include our headers
+    add_includedirs("src", "src/container", "src/memory", {public = true})
+    add_headerfiles("src/**.hpp")
     add_files("src/*.cpp")
 
 -- Unit Test Target
@@ -18,8 +18,8 @@ target("test_suite")
     set_kind("binary")
     set_languages("c++20")
     add_packages("doctest")
-    add_files("tests/*.cpp")
-    add_deps("mir-container")
+    add_files("src/tests/*.cpp")
+    add_deps("zet")
     
     -- Register this binary as a test suite so xmake test can execute it
     add_tests("default")

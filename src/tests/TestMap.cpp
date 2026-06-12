@@ -4,7 +4,7 @@
 #include <ostream>
 
 TEST_CASE("Map basic operations") {
-    mir::Map<int, mir::String<32>, 10> myMap;
+    zet::Map<int, zet::String<32>, 10> myMap;
     
     SUBCASE("Insertion and Find") {
         CHECK(myMap.Size() == 0);

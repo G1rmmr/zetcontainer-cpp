@@ -7,7 +7,7 @@
 #include <concepts>
 #include <cstddef>
 
-namespace mir {
+namespace zet {
     const static std::size_t DEFAULT_ARRAY_CAPACITY = 1024;
 
     template <typename T, std::size_t C = DEFAULT_ARRAY_CAPACITY> 
@@ -56,7 +56,7 @@ namespace mir {
 
         template <typename... Args> requires std::constructible_from<T, Args...>
         constexpr T& Push(Args&&... args) {
-            assert(size < C && "[mir::List] DATA IS FULL");
+            assert(size < C && "[zet::List] DATA IS FULL");
             T* ptr = std::construct_at(std::addressof(data[size++].value), std::forward<Args>(args)...);
             return *ptr;
         }
@@ -70,7 +70,7 @@ namespace mir {
         }
 
         constexpr void Pop() {
-            assert(size > 0 && "[mir::List] DATA IS EMPTY");
+            assert(size > 0 && "[zet::List] DATA IS EMPTY");
             std::destroy_at(std::addressof(data[--size].value));
         }
 
@@ -86,12 +86,12 @@ namespace mir {
         }
 
         constexpr T& operator[](std::size_t index) {
-            assert(index < size && "[mir::List] INDEX OUT OF BOUNDS");
+            assert(index < size && "[zet::List] INDEX OUT OF BOUNDS");
             return *std::addressof(data[index].value);
         }
 
         constexpr const T& operator[](std::size_t index) const {
-            assert(index < size && "[mir::List] INDEX OUT OF BOUNDS");
+            assert(index < size && "[zet::List] INDEX OUT OF BOUNDS");
             return *std::addressof(data[index].value);
         }
 

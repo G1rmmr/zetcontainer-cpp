@@ -2,7 +2,7 @@
 #include "List.hpp"
 
 TEST_CASE("List basic operations") {
-    mir::List<int, 5> list;
+    zet::List<int, 5> list;
     
     SUBCASE("Initialization") {
         CHECK(list.Size() == 0);
@@ -32,12 +32,12 @@ TEST_CASE("List basic operations") {
         list.Push(1);
         list.Push(2);
         
-        mir::List<int, 5> list2(list);
+        zet::List<int, 5> list2(list);
         CHECK(list2.Size() == 2);
         CHECK(list2[0] == 1);
         CHECK(list2[1] == 2);
         
-        mir::List<int, 5> list3;
+        zet::List<int, 5> list3;
         list3 = list;
         CHECK(list3.Size() == 2);
         CHECK(list3[0] == 1);
@@ -48,7 +48,7 @@ TEST_CASE("List basic operations") {
         list.Push(1);
         list.Push(2);
         
-        mir::List<int, 5> list2(std::move(list));
+        zet::List<int, 5> list2(std::move(list));
         CHECK(list2.Size() == 2);
         CHECK(list2[0] == 1);
         CHECK(list2[1] == 2);

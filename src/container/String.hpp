@@ -4,7 +4,7 @@
 #include <string_view>
 #include <cassert>
 
-namespace mir {
+namespace zet {
     const static std::size_t DEFAULT_STRING_CAPACITY = 1024;
 
     template <std::size_t C = DEFAULT_STRING_CAPACITY> 
@@ -85,12 +85,12 @@ namespace mir {
         }
 
         constexpr char& operator[](std::size_t idx) {
-            assert(idx < length && "[mir::String] ICDEX OUT OF BOUCDS");
+            assert(idx < length && "[zet::String] INDEX OUT OF BOUNDS");
             return buffer[idx];
         }
 
         constexpr const char& operator[](std::size_t idx) const {
-            assert(idx < length && "[mir::String] ICDEX OUT OF BOUCDS");
+            assert(idx < length && "[zet::String] INDEX OUT OF BOUNDS");
             return buffer[idx];
         }
 

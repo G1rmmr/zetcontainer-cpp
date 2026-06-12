@@ -1,8 +1,8 @@
-# mir-container
+# zet
 
-> C++20 Standard Container Library (MIR 1.0 Custom Data Structures)
+> C++20 Standard Container Library (ZET - Zro allocated Execution Toolkit)
 > 
-> This library is a collection of high-performance, lightweight custom data structures including List, Map, Pool, SparseSet, and String, designed to satisfy the MIR 1.0 specifications. It offers both the flexibility of a header-only design and the robustness of static library (.a/.lib) compilation.
+> This library is a collection of high-performance, lightweight custom data structures including List, Map, Pool, SparseSet, and String, designed to satisfy the ZET specifications. It offers both the flexibility of a header-only design and the robustness of static library (.a/.lib) compilation.
 
 ---
 
@@ -38,7 +38,7 @@ xmake config --mode=debug --yes
 # 2. Compile the static library and test targets
 xmake
 
-# 3. Run all unit tests (71 assertions)
+# 3. Run all unit tests
 xmake test
 
 # 4. Change configuration to release mode for optimized builds
@@ -55,14 +55,14 @@ The project includes automated compilation database generation (compile_commands
 
 ## 2. Using the Library in Other Xmake Projects
 
-Here are two modern methods to integrate the mir-container static library into another xmake project.
+Here are two modern methods to integrate the zet static library into another xmake project.
 
 ### Method A: Subproject Integration (Highly Recommended)
-Place the mir-container repository as a subdirectory or a Git submodule inside your consumer project, and add the following lines to your consumer's xmake.lua file:
+Place the zet repository as a subdirectory or a Git submodule inside your consumer project, and add the following lines to your consumer's xmake.lua file:
 
 ```lua
--- 1. Include the mir-container project configuration
-includes("path/to/mir-container")
+-- 1. Include the zet project configuration
+includes("path/to/zet")
 
 target("my_application")
     set_kind("binary")
@@ -70,7 +70,7 @@ target("my_application")
     
     -- 2. Link the dependency
     -- (The include header search paths and static library links will be propagated automatically!)
-    add_deps("mir-container")
+    add_deps("zet")
 ```
 
 ---
@@ -82,9 +82,9 @@ Add the following to your consumer's xmake.lua file:
 
 ```lua
 -- 1. Register and request the remote package from the GitHub repository
-add_requires("mir-container", {
-    alias = "mir-container",
-    url = "https://github.com/G1rmmr/mir-container.git",
+add_requires("zet", {
+    alias = "zet",
+    url = "https://github.com/G1rmmr/zet.git",
     on_install = function (package)
         -- Automated, silent build optimized for the user's OS and compiler
         import("package.tools.xmake").install(package)
@@ -95,7 +95,7 @@ add_requires("mir-container", {
 target("my_application")
     set_kind("binary")
     add_files("src/*.cpp")
-    add_packages("mir-container")
+    add_packages("zet")
 ```
 
 ---

@@ -5,7 +5,7 @@
 #include "SparseSet.hpp"
 #include "String.hpp"
 
-namespace mir {
+namespace zet {
     const char* LibraryVersion() {
         return "1.0.0";
     }

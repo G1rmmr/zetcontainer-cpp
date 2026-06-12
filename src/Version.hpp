@@ -1,5 +1,5 @@
 #pragma once
 
-namespace mir {
+namespace zet {
     const char* LibraryVersion();
 }

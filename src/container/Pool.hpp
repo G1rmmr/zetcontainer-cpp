@@ -5,7 +5,7 @@
 #include <memory>
 #include <concepts>
 
-namespace mir {
+namespace zet {
     const static std::size_t DEFAULT_POOL_CAPACITY = 1024;
     
     struct PoolHandle {
@@ -85,7 +85,7 @@ namespace mir {
 
         template <typename... Args> requires std::constructible_from<T, Args...>
         constexpr PoolHandle Create(Args&&... args) {
-            assert(nextFree != TERMINATOR && "[mir::Pool] POOL IS FULL");
+            assert(nextFree != TERMINATOR && "[zet::Pool] POOL IS FULL");
 
             std::size_t index = nextFree;
             nextFree = data[index].next;
@@ -97,12 +97,12 @@ namespace mir {
         }
 
         constexpr void Destroy(PoolHandle handle) {
-            assert(handle.Index < C && "[mir::Pool] INVALID INDEX");
+            assert(handle.Index < C && "[zet::Pool] INVALID INDEX");
 
             assert(generations[handle.Index] == handle.Generation && 
-                "[mir::Pool] DANGLING HANDLE (ALREADY DESTROYED OR REPLACED)");
+                "[zet::Pool] DANGLING HANDLE (ALREADY DESTROYED OR REPLACED)");
 
-            assert(occupied[handle.Index] && "[mir::Pool] DESTROYING NON-EXISTENT OBJECT");
+            assert(occupied[handle.Index] && "[zet::Pool] DESTROYING NON-EXISTENT OBJECT");
 
             std::destroy_at(std::addressof(data[handle.Index].value));
             
@@ -114,23 +114,23 @@ namespace mir {
         }
 
         constexpr T& Get(PoolHandle handle) {
-            assert(handle.Index < C && "[mir::Pool] INVALID INDEX");
+            assert(handle.Index < C && "[zet::Pool] INVALID INDEX");
 
             assert(generations[handle.Index] == handle.Generation && 
-                "[mir::Pool] DANGLING HANDLE DETECTED (USE AFTER FREE)");
+                "[zet::Pool] DANGLING HANDLE DETECTED (USE AFTER FREE)");
 
-            assert(occupied[handle.Index] && "[mir::Pool] ACCESSING NON-EXISTENT OBJECT");
+            assert(occupied[handle.Index] && "[zet::Pool] ACCESSING NON-EXISTENT OBJECT");
             
             return data[handle.Index].value;
         }
 
         constexpr const T& Get(PoolHandle handle) const {
-            assert(handle.Index < C && "[mir::Pool] INVALID INDEX");
+            assert(handle.Index < C && "[zet::Pool] INVALID INDEX");
 
             assert(generations[handle.Index] == handle.Generation && 
-                "[mir::Pool] DANGLING HANDLE DETECTED (USE AFTER FREE)");
+                "[zet::Pool] DANGLING HANDLE DETECTED (USE AFTER FREE)");
 
-            assert(occupied[handle.Index] && "[mir::Pool] ACCESSING NON-EXISTENT OBJECT");
+            assert(occupied[handle.Index] && "[zet::Pool] ACCESSING NON-EXISTENT OBJECT");
             
             return data[handle.Index].value;
         }

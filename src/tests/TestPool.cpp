@@ -4,7 +4,7 @@
 #include <ostream>
 
 TEST_CASE("Pool basic operations") {
-    mir::Pool<mir::String<32>, 4> pool;
+    zet::Pool<zet::String<32>, 4> pool;
     
     SUBCASE("Create and Get") {
         auto h1 = pool.Create("First");

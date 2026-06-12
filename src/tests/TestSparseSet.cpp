@@ -4,7 +4,7 @@
 #include <ostream>
 
 TEST_CASE("SparseSet basic operations") {
-    mir::SparseSet<mir::String<32>, 10> set;
+    zet::SparseSet<zet::String<32>, 10> set;
     
     SUBCASE("Assign and Contains") {
         CHECK(set.Size() == 0);

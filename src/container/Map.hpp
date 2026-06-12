@@ -6,7 +6,7 @@
 #include <concepts>
 #include <functional>
 
-namespace mir {
+namespace zet {
     const static std::size_t DEFAULT_MAP_CAPACITY = 1024;
 
     template <typename K, typename V, std::size_t C = DEFAULT_MAP_CAPACITY> 
@@ -128,7 +128,7 @@ namespace mir {
                 std::size_t current = (index + i) % C;
 
                 if (!occupied[current]) {
-                    assert(count < C && "[mir::Map] HASHMAP IS FULL");
+                    assert(count < C && "[zet::Map] HASHMAP IS FULL");
                     
                     std::construct_at(std::addressof(keys[current].value), key);
                     V* ptr = std::construct_at(std::addressof(values[current].value), std::forward<Args>(args)...);
@@ -144,7 +144,7 @@ namespace mir {
                 }
             }
 
-            assert(false && "[mir::Map] FAILED TO INSERT (CRITICAL)");
+            assert(false && "[zet::Map] FAILED TO INSERT (CRITICAL)");
             return values[0].value;
         }
 

@@ -1,8 +1,8 @@
 # zet
 
-C++20 Standard Container Library (ZET - Zro allocated Execution Toolkit).
+C++20 Standard Container & Memory Library (ZET - Zero-allocated Execution Toolkit).
 
-This repository provides a collection of highly optimized, lightweight, and modern C++20 custom templates including List, Map, Pool, SparseSet, and String.
+This repository provides a collection of highly optimized, lightweight, and modern C++20 custom templates including List, Map, Pool, SparseSet, String, CommandBuffer, and Custom Memory Allocators (Linear/Stack) with Pointer Handles.
 
 ---
 

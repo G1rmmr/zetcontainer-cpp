@@ -1,27 +1,35 @@
 # zet
 
-> C++20 표준 컨테이너 라이브러리 (ZET - Zro allocated Execution Toolkit)
+> C++20 표준 컨테이너 및 메모리 라이브러리 (ZET - Zero-allocated Execution Toolkit)
 > 
-> 본 라이브러리는 List, Map, Pool, SparseSet, String 등 ZET 사양을 충족하는 C++20 기반 고성능/초경량 커스텀 자료구조 모음집입니다. 헤더 전용(Header-only) 설계의 유연함과 정적 라이브러리(.a/.lib) 컴파일 빌드의 견고함을 모두 제공합니다.
+> 본 라이브러리는 List, Map, Pool, SparseSet, String, CommandBuffer 등 ZET 사양을 충족하는 C++20 기반 고성능/초경량 커스텀 자료구조 및 메모리 관리 유틸리티 모음집입니다. 런타임 힙 할당을 최소화하거나 배제하도록 설계되었습니다. 헤더 전용(Header-only) 설계의 유연함과 정적 라이브러리(.a/.lib) 컴파일 빌드의 견고함을 모두 제공합니다.
 
 ---
 
 ## 주요 특징
 
-* C++20 최신 명세 적용: concepts 및 requires 제약 조건을 통한 컴파일 타임 타입 검사
-* 초경량 설계: 불필요한 의존성을 배제하고 메모리 효율을 극대화한 커스텀 자료구조 제공
-* xmake 시스템 연동: 모던 빌드 툴 xmake를 활용한 빌드, 패키징 및 유닛 테스트의 완벽한 자동화
-* 크로스 플랫폼 검증: Windows (MSVC), Linux (GCC), macOS (Clang) 3대 플랫폼 완벽 지원
+* **런타임 무할당 (Zero Runtime Allocation)**: 런타임 중 임의의 힙 할당을 차단하여 성능 병목과 메모리 단편화를 원천적으로 예방합니다.
+* **C++20 최신 명세 적용**: concepts 및 requires 제약 조건을 통한 컴파일 타임 타입 검사 적용.
+* **초경량 설계**: 불필요한 외적 종속성을 전면 배제하고 메모리 효율을 극대화.
+* **xmake 시스템 연동**: 모던 빌드 툴 xmake를 활용한 빌드, 패키징 및 유닛 테스트의 완벽한 자동화.
+* **크로스 플랫폼 검증**: Windows (MSVC), Linux (GCC), macOS (Clang) 3대 플랫폼 완벽 지원.
 
 ---
 
-## 자료구조 목록
+## 제공 컴포넌트 목록
 
-1. List.hpp: 배열 기반 동적 리스트 (메모리 정적 할당 및 소멸자 제약 적용)
-2. String.hpp: 고정 크기 버퍼 최적화 문자열 클래스 (암시적 string_view 변환 및 결합 연산 지원)
-3. Map.hpp: 해시 함수를 활용한 고속 키-값 해시 맵 (중복 키 제어 및 이터레이션 지원)
-4. Pool.hpp: 고성능 리소스 풀 (세대(Generation) 기반 Dangling 핸들 추적 보호)
-5. SparseSet.hpp: 엔티티 관리에 최적화된 스파스 셋 (삭제 시 요소 스왑 패킹을 통한 메모리 단편화 제어)
+### 1. 컨테이너 (Containers)
+* **List.hpp**: 배열 기반 동적 리스트 (메모리 정적 할당 및 소멸자 제약 적용)
+* **String.hpp**: 고정 크기 버퍼 최적화 문자열 클래스 (암시적 string_view 변환 및 결합 연산 지원)
+* **Map.hpp**: 해시 함수를 활용한 고속 키-값 해시 맵 (중복 키 제어 및 이터레이션 지원)
+* **Pool.hpp**: 고성능 리소스 풀 (세대(Generation) 기반 Dangling 핸들 추적 보호)
+* **SparseSet.hpp**: 엔티티 관리에 최적화된 스파스 셋 (삭제 시 요소 스왑 패킹을 통한 메모리 단편화 제어)
+* **CommandBuffer.hpp**: 비소유형 지연 명령 버퍼 (대량의 일괄 실행 명령어 배치 처리에 최적화)
+
+### 2. 메모리 할당자 (Memory Allocators)
+* **LinearAllocator.hpp**: 한 번에 메모리를 일괄 해제(Reset)하는 초고속 아레나 할당자입니다. 소멸자 체인을 지원하여 비트리비얼(Non-trivial) 타입의 누수를 예방합니다.
+* **StackAllocator.hpp**: LIFO(후입선출) 방식으로 동작하는 스택 기반 할당자입니다. 특정 지점(Marker)을 지정해 해당 지점까지의 메모리를 되돌리는(Deallocate) 기능을 지원합니다.
+* **PointerHandle.hpp**: 원시 포인터 대신 할당자 내 메모리 블록의 상대적 오프셋을 활용하여 메모리를 참조하는 비소유형 안전 핸들(`PointerHandle<T>`)입니다. 메모리 재배치(Compaction)나 주소 변경 시에도 안전하게 메모리를 참조할 수 있게 돕습니다.
 
 ---
 

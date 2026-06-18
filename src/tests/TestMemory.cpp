@@ -50,8 +50,8 @@ TEST_CASE("LinearAllocator and PointerHandle operations") {
     }
 
     SUBCASE("CreateHandle buffer overflow prevention") {
-        // Create an allocator of size 16
-        zet::memory::LinearAllocator smallAlloc(16);
+        // Create an allocator of size 8
+        zet::memory::LinearAllocator smallAlloc(8);
         
         // Creating an object of size 8 fits
         auto h1 = smallAlloc.CreateHandle<double>(1.0);
@@ -105,7 +105,7 @@ TEST_CASE("StackAllocator operations") {
     }
 
     SUBCASE("CreateHandle buffer overflow prevention") {
-        zet::memory::StackAllocator smallAlloc(16);
+        zet::memory::StackAllocator smallAlloc(8);
         auto h1 = smallAlloc.CreateHandle<double>(1.0);
         CHECK(h1.Get() != nullptr);
         

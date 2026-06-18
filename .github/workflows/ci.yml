@@ -32,7 +32,7 @@ jobs:
         path: |
           ~/.xmake
           ~/.local/share/xmake
-          AppData/Local/.xmake
+          ~/AppData/Local/.xmake
         key: ${{ runner.os }}-xmake-${{ hashFiles('**/xmake.lua') }}
         restore-keys: |
           ${{ runner.os }}-xmake-

@@ -112,6 +112,7 @@ namespace zet {
         }
 
         constexpr bool operator==(const char* other) const noexcept {
+            if (other == nullptr) return length == 0;
             return View() == std::string_view(other);
         }
 

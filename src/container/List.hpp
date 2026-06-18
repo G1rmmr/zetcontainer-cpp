@@ -8,9 +8,9 @@
 #include <cstddef>
 
 namespace zet {
-    const static std::size_t DEFAULT_ARRAY_CAPACITY = 1024;
+    const static std::size_t DEFAULT_LIST_CAPACITY = 1024;
 
-    template <typename T, std::size_t C = DEFAULT_ARRAY_CAPACITY> 
+    template <typename T, std::size_t C = DEFAULT_LIST_CAPACITY>
     requires (C > 0) && std::destructible<T>
     class List {
     public:
@@ -62,11 +62,11 @@ namespace zet {
         }
 
         constexpr void Push(const T& value) requires std::copy_constructible<T> {
-            this->template Push<const T&>(value); 
+            this->template Push<const T&>(value);
         }
 
         constexpr void Push(T&& value) requires std::move_constructible<T> {
-            this->template Push<T&&>(std::forward<T>(value)); 
+            this->template Push<T&&>(std::forward<T>(value));
         }
 
         constexpr void Pop() {
@@ -95,28 +95,28 @@ namespace zet {
             return *std::addressof(data[index].value);
         }
 
-        constexpr T* begin() noexcept { 
-            return std::addressof(data[0].value); 
+        constexpr T* begin() noexcept {
+            return std::addressof(data[0].value);
         }
 
-        constexpr const T* begin() const noexcept { 
-            return std::addressof(data[0].value); 
+        constexpr const T* begin() const noexcept {
+            return std::addressof(data[0].value);
         }
 
-        constexpr T* end() noexcept { 
-            return std::addressof(data[size].value); 
+        constexpr T* end() noexcept {
+            return std::addressof(data[size].value);
         }
 
-        constexpr const T* end() const noexcept { 
-            return std::addressof(data[size].value); 
+        constexpr const T* end() const noexcept {
+            return std::addressof(data[size].value);
         }
 
-        constexpr std::size_t Size() const noexcept { 
-            return size; 
+        constexpr std::size_t Size() const noexcept {
+            return size;
         }
 
-        static constexpr std::size_t Capacity() noexcept { 
-            return C; 
+        static constexpr std::size_t Capacity() noexcept {
+            return C;
         }
 
     private:

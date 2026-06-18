@@ -3,6 +3,7 @@
 #include <cassert>
 #include <cstddef>
 #include <cstring>
+#include <type_traits>
 
 namespace zet {
 	template<std::size_t C = 8192>
@@ -13,7 +14,7 @@ namespace zet {
 			std::size_t PayloadSize;
 		};
 
-		template<typename T>
+		template<typename T> requires std::is_trivially_copyable_v<T>
 		constexpr void Push(void (*apply)(const void*), const T& data) noexcept {
 			std::size_t alignSize = alignof(std::max_align_t);
 			std::size_t alignedOffset = (writeOffset + alignSize - 1) & ~(alignSize - 1);
@@ -33,14 +34,14 @@ namespace zet {
 			std::size_t readOffset = 0;
 			std::size_t alignSize = alignof(std::max_align_t);
 			std::size_t headerSize = sizeof(Header);
-			
+
 			while (readOffset < writeOffset) {
 				readOffset = (readOffset + alignSize - 1) & ~(alignSize - 1);
 
 				if (readOffset >= writeOffset) {
 					break;
 				}
-				
+
 				Header header;
 				std::memcpy(&header, &stream[readOffset], headerSize);
 

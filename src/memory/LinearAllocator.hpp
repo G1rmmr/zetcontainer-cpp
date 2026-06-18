@@ -1,5 +1,6 @@
 #pragma once
 
+#include "MemoryAllocator.hpp"
 #include "PointerHandle.hpp"
 
 #include <cstddef>
@@ -9,11 +10,11 @@
 #include <utility>
 
 namespace zet::memory {
-	class LinearAllocator : public BaseAllocator {
+	class LinearAllocator : public MemoryAllocator {
 	private:
 		struct destructor {
 			void (*Func)(void*) = nullptr;
-			destructor* Next = nullptr; 
+			destructor* Next = nullptr;
 			void* Target = nullptr;
 		};
 
@@ -44,9 +45,9 @@ namespace zet::memory {
 			return nullptr;
 		}
 
-		template <typename T, typename... Args>
-		T* Create(Args&&... args, const bool isInternal = false) {
-			if(!isInternal) {
+		template <typename T, bool IsInternal = false, typename... Args>
+		T* Create(Args&&... args) {
+			if constexpr (!IsInternal) {
 				static_assert(std::is_trivially_destructible_v<T>, "[LINEAR ALLOCATOR] POLICY VIOLATION");
 			}
 
@@ -59,17 +60,19 @@ namespace zet::memory {
 
 			if constexpr (!std::is_trivially_destructible_v<T>) {
 				void* node = Allocate(sizeof(destructor), alignof(destructor));
-				if (node) {
-					destructor* newNode = ::new (node) destructor();
-					newNode->Func = [](void* ptr) {
-						static_cast<T*>(ptr)->~T();
-					};
-
-					newNode->Next = lastDestructor;
-					newNode->Target = objPtr;
-
-					lastDestructor = newNode;
+				if (!node) {
+					objPtr->~T();
+					return nullptr;
 				}
+				destructor* newNode = ::new (node) destructor();
+				newNode->Func = [](void* ptr) {
+					static_cast<T*>(ptr)->~T();
+				};
+
+				newNode->Next = lastDestructor;
+				newNode->Target = objPtr;
+
+				lastDestructor = newNode;
 			}
 
 			return objPtr;
@@ -79,13 +82,13 @@ namespace zet::memory {
 			return start;
 		}
 
-		template <typename T, typename... Args>
-		PointerHandle<T> CreateHandle(Args&&... args, const bool isInternal = false) {
-			if(!isInternal) {
+		template <typename T, bool IsInternal = false, typename... Args>
+		PointerHandle<T> CreateHandle(Args&&... args) {
+			if constexpr (!IsInternal) {
 				static_assert(std::is_trivially_destructible_v<T>, "[LINEAR ALLOCATOR] POLICY VIOLATION");
 			}
-			
-			std::size_t space = sizeof(T) + alignof(T);
+
+			std::size_t space = end - offset;
 			void* ptr = offset;
 
 			if(!std::align(alignof(T), sizeof(T), ptr, space)) {
@@ -93,10 +96,33 @@ namespace zet::memory {
 			}
 
 			std::uint32_t offsetVal = static_cast<std::uint32_t>(static_cast<std::byte*>(ptr) - start);
-			offset = static_cast<std::byte*>(ptr) + sizeof(T);
 
-			::new(ptr) T(std::forward<Args>(args)...);
-			return PointerHandle<T>(this, offsetVal);
+			if constexpr (!std::is_trivially_destructible_v<T>) {
+				std::byte* nextOffset = static_cast<std::byte*>(ptr) + sizeof(T);
+				std::size_t destSpace = end - nextOffset;
+				void* destPtr = nextOffset;
+				if (!std::align(alignof(destructor), sizeof(destructor), destPtr, destSpace)) {
+					return PointerHandle<T>();
+				}
+
+				offset = static_cast<std::byte*>(destPtr) + sizeof(destructor);
+
+				T* objPtr = ::new(ptr) T(std::forward<Args>(args)...);
+
+				destructor* newNode = ::new(destPtr) destructor();
+				newNode->Func = [](void* p) {
+					static_cast<T*>(p)->~T();
+				};
+				newNode->Next = lastDestructor;
+				newNode->Target = objPtr;
+				lastDestructor = newNode;
+
+				return PointerHandle<T>(this, offsetVal);
+			} else {
+				offset = static_cast<std::byte*>(ptr) + sizeof(T);
+				::new(ptr) T(std::forward<Args>(args)...);
+				return PointerHandle<T>(this, offsetVal);
+			}
 		}
 
 		void Reset() noexcept {
